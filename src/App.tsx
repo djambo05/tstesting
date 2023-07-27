@@ -1,7 +1,7 @@
 import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import Env from "./Environment";
+import Env, { EnvVariant } from "./Environment";
 
 function App() {
   return (
@@ -20,7 +20,18 @@ function App() {
           Learn React
         </a>
       </header>
-      <Env height="50vh" />
+      <Env
+        onClick={(num) => console.log("clicked", num)}
+        height="50vh"
+        variant={EnvVariant.easy}
+      >
+        <div>useState</div>
+        <div>useEffect</div>
+        <div>useRef</div>
+        <div>useMemo</div>
+        <div>useContext</div>
+        <div>useCallBack</div>
+      </Env>
     </div>
   );
 }
