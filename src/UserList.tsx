@@ -1,9 +1,9 @@
 import React, { FC } from "react";
-import { IUsers } from "./types/types";
+import { IUser } from "./types/types";
 import User from "./User";
 
 interface UserListProps {
-  users: IUsers[];
+  users: IUser[];
 }
 
 const UserList: FC<UserListProps> = ({ users }) => {
