@@ -1,33 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import Env, { EnvVariant } from "./Environment";
 import UserList from "./UserList";
-import { IUsers } from "./types/types";
+import { IUser } from "./types/types";
 
 function App() {
-  const users: IUsers[] = [
-    {
-      id: 1,
-      name: "Leanne Graham",
-      email: "Sincere@april.biz",
-      address: {
-        street: "Kulas Light",
-        city: "Gwenborough",
-        zipcode: "92998-3874",
-      },
-    },
-    {
-      id: 2,
-      name: "Ervin Howell",
-      email: "Shanna@melissa.tv",
-      address: {
-        street: "Victor Plains",
-        city: "Wisokyburgh",
-        zipcode: "90566-7771",
-      },
-    },
-  ];
+  const [users, setUsers] = useState<IUser[]>([]);
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  async function fetchUsers() {
+    try {
+      const response = await fetch(
+        `https://jsonplaceholder.typicode.com/users`
+      ).then<IUser[]>((res) => res.json());
+      setUsers(response);
+    } catch (e) {
+      alert(e);
+    }
+  }
+
   return (
     <div className="App">
       <header className="App-header">
