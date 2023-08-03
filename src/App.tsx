@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
-import logo from "./logo.svg";
 import "./App.css";
-import Env, { EnvVariant } from "./Environment";
-import UserList from "./UserList";
-import { IUser } from "./types/types";
+import Env, { EnvVariant } from "./components/Environment";
+import { ITodo, IUser } from "./types/types";
+import List from "./components/List";
+import User from "./components/UserItem";
+import TodoItem from "./components/TodoItem";
+import EventsExample from "./components/EventsExample";
 
 function App() {
   const [users, setUsers] = useState<IUser[]>([]);
-
+  const [todos, setTodos] = useState<ITodo[]>([])
   useEffect(() => {
     fetchUsers();
+    fetchTodos()
   }, []);
 
   async function fetchUsers() {
@@ -22,23 +25,20 @@ function App() {
       alert(e);
     }
   }
+  async function fetchTodos() {
+    try {
+      const response = await fetch(
+        `https://jsonplaceholder.typicode.com/todos?_limit=10`
+      ).then<ITodo[]>((res) => res.json());
+      setTodos(response);
+    } catch (e) {
+      alert(e);
+    }
+  }
+
 
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
       <Env
         onClick={(num) => console.log("clicked", num)}
         height="50vh"
@@ -51,7 +51,15 @@ function App() {
         <div>useContext</div>
         <div>useCallBack</div>
       </Env>
-      <UserList users={users} />
+      <List
+        items={users}
+        renderItem={(user: IUser) => <User key={user.id} user={user}></User>}
+      />
+      <List
+        items={todos}
+        renderItem={(todo: ITodo) => <TodoItem key={todo.id} todo={todo}/>}
+      />
+      <EventsExample/>
     </div>
   );
 }
