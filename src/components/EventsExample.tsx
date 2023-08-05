@@ -1,15 +1,15 @@
-import { ReadVResult } from "fs";
-import React, { FC, useState } from "react";
+import React, { FC, useRef, useState } from "react";
 
 const EventsExample: FC = () => {
   const [value, setValue] = useState<string>("");
   const [isDrag, setIsDrag] = useState<boolean>(false);
+  const inputRef = useRef<HTMLInputElement>(null);
   const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
   };
 
   const clickHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
-    console.log(value);
+    console.log(inputRef.current?.value);
   };
 
   const dragHandler = (e: React.DragEvent<HTMLDivElement>) => {
@@ -48,7 +48,13 @@ const EventsExample: FC = () => {
           backgroundColor: isDrag ? "blue" : "red",
         }}
       />
-      <input value={value} onChange={changeHandler} type="text" />
+      <input
+        placeholder="managed"
+        value={value}
+        onChange={changeHandler}
+        type="text"
+      />
+      <input ref={inputRef} placeholder="unmanaged" type="text" />
       <button onClick={clickHandler}>Button</button>
     </div>
   );

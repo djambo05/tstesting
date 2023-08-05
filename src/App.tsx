@@ -1,66 +1,27 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import Env, { EnvVariant } from "./components/Environment";
-import { ITodo, IUser } from "./types/types";
-import List from "./components/List";
-import User from "./components/UserItem";
-import TodoItem from "./components/TodoItem";
-import EventsExample from "./components/EventsExample";
+import { BrowserRouter, Route, Routes, Link } from "react-router-dom";
+import UserPage from "./components/UserPage";
+import TodosPage from "./components/TodosPage";
+import UserItemPage from "./components/UserItemPage";
+import TodoItemPage from "./components/TodoItemPage";
 
 function App() {
-  const [users, setUsers] = useState<IUser[]>([]);
-  const [todos, setTodos] = useState<ITodo[]>([])
-  useEffect(() => {
-    fetchUsers();
-    fetchTodos()
-  }, []);
-
-  async function fetchUsers() {
-    try {
-      const response = await fetch(
-        `https://jsonplaceholder.typicode.com/users`
-      ).then<IUser[]>((res) => res.json());
-      setUsers(response);
-    } catch (e) {
-      alert(e);
-    }
-  }
-  async function fetchTodos() {
-    try {
-      const response = await fetch(
-        `https://jsonplaceholder.typicode.com/todos?_limit=10`
-      ).then<ITodo[]>((res) => res.json());
-      setTodos(response);
-    } catch (e) {
-      alert(e);
-    }
-  }
-
-
   return (
-    <div className="App">
-      <Env
-        onClick={(num) => console.log("clicked", num)}
-        height="50vh"
-        variant={EnvVariant.easy}
-      >
-        <div>useState</div>
-        <div>useEffect</div>
-        <div>useRef</div>
-        <div>useMemo</div>
-        <div>useContext</div>
-        <div>useCallBack</div>
-      </Env>
-      <List
-        items={users}
-        renderItem={(user: IUser) => <User key={user.id} user={user}></User>}
-      />
-      <List
-        items={todos}
-        renderItem={(todo: ITodo) => <TodoItem key={todo.id} todo={todo}/>}
-      />
-      <EventsExample/>
-    </div>
+    <BrowserRouter>
+      <div>
+        <Link to="/users">Users</Link>
+        <Link to="/todos">Todos</Link>
+      </div>
+      <div>
+        <Routes>
+          <Route path="/users" element={<UserPage />} />
+          <Route path="/todos" element={<TodosPage />} />
+          <Route path="/users/:id" element={<UserItemPage />} />
+          <Route path="/todos/:id" element={<TodoItemPage />} />
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 }
 
